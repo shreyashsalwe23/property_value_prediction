@@ -72,3 +72,12 @@ lin_rmses = -cross_val_score(lin_reg, housing_prepared, housing_labels, scoring 
 # print(f"The root mean square error for Linear Regression is {lin_rmse}")
 print(pd.Series(lin_rmses).describe())
 
+# Decision Tree Model
+dec_reg = DecisionTreeRegressor()
+dec_reg.fit(housing_prepared, housing_labels)
+dec_preds = dec_reg.predict(housing_prepared)
+# dec_rmse = root_mean_squared_error(housing_labels, dec_preds)
+dec_rmses = -cross_val_score(dec_reg, housing_prepared, housing_labels, scoring = "neg_root_mean_squared_error", cv = 10)
+
+# print(f"The root mean square error for Decision Tree is {dec_rmse}")
+print(pd.Series(dec_rmses).describe())
