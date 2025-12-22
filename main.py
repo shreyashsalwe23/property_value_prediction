@@ -5,7 +5,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import root_mean_squared_error
+from sklearn.model_selection import cross_val_score
 # 1. Load the Dataset
 housing = pd.read_csv("housing.csv")
 
@@ -55,3 +59,16 @@ full_pipeline = ColumnTransformer([
 # 6. Transform the data
 housing_prepared = full_pipeline.fit_transform(housing)
 print(housing_prepared.shape)
+
+# 7. Train the model
+
+# Linear Regression Model
+lin_reg = LinearRegression()
+lin_reg.fit(housing_prepared, housing_labels)
+lin_preds = lin_reg.predict(housing_prepared)
+# lin_rmse = root_mean_squared_error(housing_labels, lin_preds)
+lin_rmses = -cross_val_score(lin_reg, housing_prepared, housing_labels, scoring = "neg_root_mean_squared_error", cv = 10)
+
+# print(f"The root mean square error for Linear Regression is {lin_rmse}")
+print(pd.Series(lin_rmses).describe())
+
